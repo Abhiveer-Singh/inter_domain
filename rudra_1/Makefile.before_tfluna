@@ -1,0 +1,25 @@
+CXX_SOURCES = rover_controller.cpp
+
+ORB_SLAM3_DIR = $(HOME)/slam_setup/ORB_SLAM3
+
+CXXFLAGS += -std=c++17 -O2 -Wall
+CXXFLAGS += -Wno-deprecated-declarations
+CXXFLAGS += -Wno-sign-compare
+CXXFLAGS += -Wno-reorder
+CXXFLAGS += -DGL_GLEXT_PROTOTYPES
+CXXFLAGS += $(shell pkg-config --cflags opencv4)
+CXXFLAGS += -I$(ORB_SLAM3_DIR)/include
+CXXFLAGS += -I$(ORB_SLAM3_DIR)
+CXXFLAGS += -I$(ORB_SLAM3_DIR)/include/CameraModels
+CXXFLAGS += -I$(ORB_SLAM3_DIR)/Thirdparty/Sophus
+CXXFLAGS += -I/usr/include/eigen3
+
+include $(WEBOTS_HOME)/resources/Makefile.include
+
+LIBRARIES += $(shell pkg-config --libs opencv4)
+LIBRARIES += -L$(ORB_SLAM3_DIR)/lib -lORB_SLAM3
+LIBRARIES += -L/usr/local/lib -Wl,-rpath,/usr/local/lib
+LIBRARIES += -Wl,-rpath,$(ORB_SLAM3_DIR)/lib
+LIBRARIES += -lpango_display
+LIBRARIES += -lpango_opengl
+LIBRARIES += -lGL
