@@ -1,0 +1,110 @@
+#include <zephyr/dt-bindings/pwm/pwm.h>
+#include <zephyr/dt-bindings/gpio/gpio.h>
+#include <zephyr/dt-bindings/adc/adc.h>
+#include <zephyr/dt-bindings/i2c/i2c.h>
+
+/ {
+	zephyr,user {
+		/* 8 PWM lines, 20 kHz: FL_R FL_L FR_R FR_L RL_R RL_L RR_R RR_L */
+		pwms = <&pwm3 1 PWM_HZ(20000) PWM_POLARITY_NORMAL>,   /* PA6  FL RPWM */
+		       <&pwm3 2 PWM_HZ(20000) PWM_POLARITY_NORMAL>,   /* PA7  FL LPWM */
+		       <&pwm3 3 PWM_HZ(20000) PWM_POLARITY_NORMAL>,   /* PB0  FR RPWM */
+		       <&pwm3 4 PWM_HZ(20000) PWM_POLARITY_NORMAL>,   /* PB1  FR LPWM */
+		       <&pwm1 1 PWM_HZ(20000) PWM_POLARITY_NORMAL>,   /* PA8  RL RPWM */
+		       <&pwm1 2 PWM_HZ(20000) PWM_POLARITY_NORMAL>,   /* PA9  RL LPWM */
+		       <&pwm1 3 PWM_HZ(20000) PWM_POLARITY_NORMAL>,   /* PA10 RR RPWM */
+		       <&pwm1 4 PWM_HZ(20000) PWM_POLARITY_NORMAL>;   /* PA11 RR LPWM */
+
+		/* index 0: R_EN on PB5, index 1: L_EN on PB10 */
+		enable-gpios = <&gpiob 5 GPIO_ACTIVE_HIGH>,
+			       <&gpiob 10 GPIO_ACTIVE_HIGH>;
+
+		/* GPS on USART6: TX PC6, RX PC7 */
+		gps-uart = <&usart6>;
+
+		/* UV sensor on PA0 (ADC1 channel 0) */
+		io-channels = <&adc1 0>;
+	};
+
+	/* DHT11 data pin on PC0 */
+	dht11: dht11 {
+		compatible = "aosong,dht";
+		status = "okay";
+		dio-gpios = <&gpioc 0 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
+	};
+};
+
+/* TIM3: front wheels */
+&timers3 {
+	status = "okay";
+
+	pwm3: pwm {
+		status = "okay";
+		pinctrl-0 = <&tim3_ch1_pa6 &tim3_ch2_pa7 &tim3_ch3_pb0 &tim3_ch4_pb1>;
+		pinctrl-names = "default";
+	};
+};
+
+/* TIM1: rear wheels */
+&timers1 {
+	status = "okay";
+
+	pwm1: pwm {
+		status = "okay";
+		pinctrl-0 = <&tim1_ch1_pa8 &tim1_ch2_pa9 &tim1_ch3_pa10 &tim1_ch4_pa11>;
+		pinctrl-names = "default";
+	};
+};
+
+/* GPS UART */
+&usart6 {
+	status = "okay";
+	current-speed = <9600>;
+	pinctrl-0 = <&usart6_tx_pc6 &usart6_rx_pc7>;
+	pinctrl-names = "default";
+};
+
+/* I2C1 on PB8 (SCL) / PB9 (SDA): MPU6050 + BMP280 */
+&i2c1 {
+	status = "okay";
+	clock-frequency = <I2C_BITRATE_FAST>;
+	pinctrl-0 = <&i2c1_scl_pb8 &i2c1_sda_pb9>;
+	pinctrl-names = "default";
+
+	mpu6050: mpu6050@68 {
+		compatible = "invensense,mpu6050";
+		reg = <0x68>;
+	};
+
+	bmp280: bmp280@76 {
+		compatible = "bosch,bme280";
+		reg = <0x76>;
+	};
+
+  tof: vl53l0x@29 {
+    compatible = "st,vl53l0x";
+		reg = <0x29>;
+  };
+};
+
+/* ADC1 for the UV sensor */
+&adc1 {
+	status = "okay";
+	pinctrl-0 = <&adc1_in0_pa0>;
+	pinctrl-names = "default";
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	channel@0 {
+		reg = <0>;
+		zephyr,gain = "ADC_GAIN_1";
+		zephyr,reference = "ADC_REF_INTERNAL";
+		zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+		zephyr,resolution = <12>;
+	};
+};
+
+&adc123_common {
+	status = "okay";
+	st,adc-prescaler = <2>;
+};

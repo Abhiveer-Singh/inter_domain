@@ -1,0 +1,13 @@
+Final pin map
+Part	Pin
+DHT11	PA0 (A0)
+Turbidity SEN0189	PA1 (A1), through a 10k + 20k divider
+UV (CJMCU-GUVA-S12SD)	PA4 (A2), direct, powered at 3.3V
+pH (PH-4502C)	PC0 (A5), through a 10k + 20k divider
+DS18B20	PB4 (D5), with a 4.7k pull-up to 3V3
+I2C1 (BMP280 0x76, INA219 0x40, MPU6050 0x68)	PB8 = SCL, PB9 = SDA
+GPS	PC6 = TX, PC7 = RX
+Motors (PWM)	PA6, PA7, PB0, PB1, PA8, PA9, PA10, PA11
+Motor enable	PB5 (D4)
+Divider: signal → 10k → ADC pin → 20k → GND. The code multiplies the reading back by 1.5.
+INA219 wiring: battery + → VIN+, VIN- → your load, and the battery ground shared with the Nucleo ground. Power the module from 3V3, with SCL/SDA on PB8/PB9.

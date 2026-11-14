@@ -1,0 +1,63 @@
+cmake:
+  application:
+    configuration-dir: '/home/halo/aquila/stuff'
+    source-dir: '/home/halo/aquila/stuff'
+  board:
+    name: 'nucleo_f446re'
+    path:
+     - '/home/halo/aquila/zephyr/boards/st/nucleo_f446re'
+    qualifiers: 'stm32f446xx'
+    revision: ''
+  devicetree:
+    bindings-dirs:
+     - '/home/halo/aquila/zephyr/dts/bindings'
+    files:
+     - '/home/halo/aquila/zephyr/boards/st/nucleo_f446re/nucleo_f446re.dts'
+     - '/home/halo/aquila/stuff/boards/nucleo_f446re.overlay'
+    include-dirs:
+     - '/home/halo/aquila/modules/hal/ambiq/dts'
+     - '/home/halo/aquila/modules/hal/atmel/include'
+     - '/home/halo/aquila/modules/hal/bouffalolab/include'
+     - '/home/halo/aquila/modules/hal/bouffalolab/include/zephyr'
+     - '/home/halo/aquila/modules/hal/gigadevice/include'
+     - '/home/halo/aquila/modules/hal/infineon/dts'
+     - '/home/halo/aquila/modules/hal/microchip/include'
+     - '/home/halo/aquila/modules/hal/microchip/dts'
+     - '/home/halo/aquila/modules/hal/nuvoton/dts'
+     - '/home/halo/aquila/modules/hal/nxp/dts'
+     - '/home/halo/aquila/modules/hal/stm32/dts'
+     - '/home/halo/aquila/modules/hal/ti/dts'
+     - '/home/halo/aquila/zephyr/include'
+     - '/home/halo/aquila/zephyr/include/zephyr'
+     - '/home/halo/aquila/zephyr/dts/common'
+     - '/home/halo/aquila/zephyr/dts/vendor'
+     - '/home/halo/aquila/zephyr/dts/tricore'
+     - '/home/halo/aquila/zephyr/dts/rx'
+     - '/home/halo/aquila/zephyr/dts/x86'
+     - '/home/halo/aquila/zephyr/dts/xtensa'
+     - '/home/halo/aquila/zephyr/dts/sparc'
+     - '/home/halo/aquila/zephyr/dts/riscv'
+     - '/home/halo/aquila/zephyr/dts/posix'
+     - '/home/halo/aquila/zephyr/dts/arm64'
+     - '/home/halo/aquila/zephyr/dts/arm'
+     - '/home/halo/aquila/zephyr/dts/arc'
+     - '/home/halo/aquila/zephyr/dts'
+    user-files:
+     - '/home/halo/aquila/stuff/boards/nucleo_f446re.overlay'
+  kconfig:
+    files:
+     - '/home/halo/aquila/zephyr/boards/st/nucleo_f446re/nucleo_f446re_defconfig'
+     - '/home/halo/aquila/stuff/prj.conf'
+    user-files:
+     - '/home/halo/aquila/stuff/prj.conf'
+  toolchain:
+    name: 'zephyr'
+    path: '/home/halo/zephyr-sdk/zephyr-sdk-1.0.1'
+  zephyr:
+    version: '4.5.99'
+    zephyr-base: '/home/halo/aquila/zephyr'
+version: '0.1.0'
+west:
+  command: '/home/halo/.local/bin/west build -b nucleo_f446re -p always .'
+  topdir: '/home/halo/aquila'
+  version: '1.5.0'
